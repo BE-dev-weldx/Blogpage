@@ -1,0 +1,110 @@
+create table patients(
+	patient_id bigint not null primary key,
+	patient_name varchar(100),
+	category_name varchar(100),
+	category_id not null bigint,
+	payment_id not null bigint,
+	admitted date,
+	released date,
+	phone_no bigint,
+	email_id varchar(100),
+	address varchar(100),
+	gender varchar(100),
+	blood_grp varchar(100),
+	date_of_birth date,
+	patient_state varchar(100),
+	foreign key (payment_id) references billings(payment_id),
+	foreign key (category_id) references categories(C_id)
+);
+
+create table categories(
+	C_id bigint not null primary key,
+	C_name not null varchar(100),
+	C_desc not null varchar(500),
+	C_procedure not null varchar(500),
+	dept_id bigint not null,
+	foreign key (dept_id) references departments(dept_id)
+);
+
+create table billings(
+	payment_id bigint not null primary key,
+	patient_id bigint not null,
+	patient_name varchar(100),
+	room_id bigint not null,
+	med_id bigint not null,
+	c_id bigint not null,
+	admitted date,
+	released date,
+	treatment_id bigint not null,
+	meal_id bigint,
+	total_amount bigint,
+	foreign key (patient_id) references patients(patient_id),
+	foreign key (room_id) references rooms(room_id),
+	foreign key (med_id) references medicines(med_id),
+	foreign key (c_id) references categories(C_id),
+	foreign key (treatment_id) references treatments(treatment_id),
+	foreign key (meal_id) references meals(meal_id)
+);
+
+create table medicines(
+	med_id bigint not null primary key,
+	med_name not null varchar(100),
+	med_cost bigint not null, 
+	availabilty bool,
+	stock_amount bigint not null,
+	C_id bigint not null,
+	foreign key (C_id) references categories(C_id)
+);
+
+create table meals(
+	meal_id bigint not null primary key,
+	meal_name not null varchar(200),
+	meal_cost not null bigint,
+	C_id bigint,
+	availability bool,
+	foreign key (C_id) references categories(C_id)
+);
+
+create table rooms(
+	room_id bigint not null primary key,
+	room_name varchar(100),
+	C_id bigint not null,
+	dept_id bigint not null,
+	patient_id bigint,
+	foreign key (C_id) references categories(C_id),
+	foreign key (dept_id) references departments(dept_id),
+	foreign key (patient_id) references patients(patient_id)
+);
+
+create table departments(
+	dept_id bigint not null primary key,
+	dept_name varchar(200),
+	C_id bigint,
+	foreign key (C_id) references categories(C_id)
+);
+
+create table doctors(
+	doctor_id bigint not null primary key,
+	doctor_name varchar(200),
+	dept_id bigint not null,
+	availabilty bool,
+	phone_no bigint not null,
+	email_id varchar(200),
+	address varchar(300),
+	events bigint not null,
+	place varchar(200),
+	foreign key (dept_id) references departments(dept_id)
+);
+
+create table nurses(
+	nurse_id bigint not null primary key,
+	nurse_name varchar(200),
+	dept_id bigint not null,
+	phone_no bigint not null,
+	email_id varchar(200),
+	address(300),
+	place varchar(200),
+	foreign key (dept_id) references departments(dept_id)
+);
+
+
